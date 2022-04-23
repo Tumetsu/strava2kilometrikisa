@@ -11,7 +11,7 @@
     "backend:build": "tsc",
     "backend:serve": "node dist/index.js",
     "backend:watch": "ts-node-dev app/index.ts",
-    "frontend:build": "webpack -p",
+    "frontend:build": "webpack --mode production",
     "frontend:watch": "webpack --watch --mode development",
     "dev": "concurrently \"npm run frontend:watch\" \"npm run backend:watch\"",
     "worker:run": "node dist/sync-worker/worker.js",

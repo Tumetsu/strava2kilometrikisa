@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { isLoggedIn } from '../helpers/helpers';
 
 export default {
   Home: function (req: Request, res: Response) {
-    if (isLoggedIn(req)) {
+    if (req.session.stravaUserId) {
       res.redirect('/account');
     } else {
       res.render('index', {});

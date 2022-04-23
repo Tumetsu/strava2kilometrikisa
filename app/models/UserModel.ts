@@ -82,8 +82,7 @@ export const UserModel = mongoose.model<User>('User', UserSchema);
  * An utility method to fetch users and throw an exception always if one is not found.
  * @param filter
  */
-//eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function findUser(filter: FilterQuery<any>): Promise<User> {
+export async function findUser(filter: FilterQuery<User>): Promise<User> {
   const user = await UserModel.findOne(filter);
   if (!user) {
     throw new HttpException(404, 'User not found!');

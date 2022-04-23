@@ -1,5 +1,5 @@
 # Strava2kilometrikisa-2
-A fork from original Strava2Kilometrikisa app. Goal is to modernize the code and port the project to Typescript.
+A fork from [the original Strava2Kilometrikisa app](https://github.com/jaamo/strava2kilometrikisa). Goal is to modernize the code and port the project to Typescript.
 
 An application to fill the gap between [Strava](https://strava.com/) and [Kilometrikisa](https://www.kilometrikisa.fi/).
 

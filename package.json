@@ -1,12 +1,12 @@
 {
   "name": "strava2kilometrikisa",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An application to fill the gap between Strava and Kilometrikisa.",
   "main": "dist/index.js",
   "engines": {
     "node": "16.x"
   },
-  "repository": "https://github.com/jaamo/strava2kilometrikisa",
+  "repository": "https://github.com/tumetsu/strava2kilometrikisa",
   "scripts": {
     "backend:build": "tsc",
     "backend:serve": "node dist/index.js",
@@ -21,7 +21,7 @@
     "prettier:fix": "prettier --write 'app/**/*.{js,ts,scss}'",
     "test": "jest --testPathIgnorePatterns .spec.js"
   },
-  "author": "Jaakko Alajoki and Paul Stewart",
+  "author": "Tuomas Salmi, Jaakko Alajoki and Paul Stewart",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.12.10",

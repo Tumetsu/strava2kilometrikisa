@@ -33,11 +33,11 @@ export default {
         res.render('strava-autherror', {});
       } else {
         // Save token to session.
-        req.session.stravaUserId = payload.athlete.id;
+        req.session.stravaUserId = payload.athlete.id as number;
 
         try {
           // Create user object, if id doesn't exists.
-          let user = await UserModel.findOne({ stravaUserId: req.session.stravaUserId as string }, 'stravaUserId');
+          let user = await UserModel.findOne({ stravaUserId: req.session.stravaUserId }, 'stravaUserId');
           if (!user) {
             user = new UserModel();
           }

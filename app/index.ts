@@ -12,21 +12,21 @@ import { getDbConnection } from './services/database/database';
 const app = express();
 const MongoStore = connectMongo(session);
 
-// Controllers
-import Home from './controllers/Home';
-import Kilometrikisa from './controllers/Kilometrikisa';
-import StravaAuth from './controllers/StravaAuth';
-import Sync from './controllers/Sync';
-
 // Extend Express request typings with session data
 declare module 'express-session' {
-  interface SessionData {
-    stravaUserId: string | null;
+  export interface SessionData {
+    stravaUserId: number | null;
     stravaToken: string | null;
     kilometrikisaToken: string | null;
     kilometrikisaSessionId: string | null;
   }
 }
+
+// Controllers
+import Home from './controllers/Home';
+import Kilometrikisa from './controllers/Kilometrikisa';
+import StravaAuth from './controllers/StravaAuth';
+import Sync from './controllers/Sync';
 
 getDbConnection();
 

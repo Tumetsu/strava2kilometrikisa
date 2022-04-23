@@ -13,7 +13,7 @@ export default {
    */
   auth: async function (req: Request, res: Response) {
     try {
-      const user = await findUser({ stravaUserId: req.session.stravaUserId as string });
+      const user = await findUser({ stravaUserId: req.session.stravaUserId as number });
       await kilometrikisa.kilometrikisaSession({
         username: user.kilometrikisaUsername,
         password: user.kilometrikisaPassword,
@@ -42,7 +42,7 @@ export default {
       logger.info('Login complete', { username });
 
       try {
-        const user = await findUser({ stravaUserId: req.session.stravaUserId as string });
+        const user = await findUser({ stravaUserId: req.session.stravaUserId as number });
         const { token, sessionId } = session.sessionCredentials;
 
         // Save Kilometrikisa token and session id.

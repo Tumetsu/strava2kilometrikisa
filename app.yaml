@@ -1,0 +1,27 @@
+runtime: nodejs16
+instance_class: F2
+env_variables:
+  PORT: 8080
+  LOGGING_LEVEL: info
+  KILOMETRIKISA_DB: strava2kilometrikisa
+  KILOMETRIKISA_DBUSER: strava2kilometrikisa
+  KILOMETRIKISA_DBHOST: strava2kilometrikisa.xypxj.mongodb.net
+  KILOMETRIKISA_COMPETITION_ID: 47
+  STRAVA_REDIRECT_URI: https://strava2kilometrikisa.ey.r.appspot.com/strava/authcomplete
+  CRON_TIME_SYNC: '0 4 * * *'
+
+handlers:
+  - url: /favicon\.ico
+    static_files: favicon.ico
+    upload: app/assets/img/favicon\.ico
+
+  - url: /img
+    static_dir: app/assets/img
+
+  - url: /dist
+    static_dir: app/assets/dist
+
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto

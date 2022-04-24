@@ -38,3 +38,4 @@ app/assets/dist
 .idea
 .env
 dist/
+gcp_key.json

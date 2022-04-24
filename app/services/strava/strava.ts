@@ -1,5 +1,3 @@
-import { env, secrets } from '../../environment';
-
 const strava = require('strava-v3');
 
 interface StravaActivity {
@@ -61,13 +59,6 @@ export async function getStravaActivities(
   stravaToken: string,
   syncEBike: boolean,
 ): Promise<KilometrikisaActivityByDate> {
-  strava.config({
-    access_token: secrets.stravaAccessToken,
-    client_id: secrets.stravaClientId,
-    client_secret: secrets.stravaClientSecret,
-    redirect_uri: env.stravaRedirectUri,
-  });
-
   const activityByDate: ActivityByDate = await strava.athlete
     .listActivities({ access_token: stravaToken, after: lastFiveDaysDate() })
     .filter((activity: StravaActivity) => {

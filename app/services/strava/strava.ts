@@ -101,7 +101,7 @@ export async function getStravaActivities(
       const minutes = Math.floor((activity.seconds - hours * 3600) / 60);
 
       collection[date] = {
-        distance: activity.distance,
+        distance: Math.round(activity.distance * 100) / 100,
         isEBike: activity.isEBike,
         hours,
         minutes,

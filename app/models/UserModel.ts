@@ -20,7 +20,7 @@ export interface User extends mongoose.Document {
   ebike: boolean;
 
   updateToken: () => Promise<void>;
-  setPassword: (password: string) => Promise<void>;
+  setPassword: (password: string) => void;
   getPassword: () => string;
 }
 

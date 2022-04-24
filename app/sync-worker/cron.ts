@@ -8,7 +8,7 @@ function timeout(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function syncAllUsers() {
+export async function syncAllUsers(throttle = 3500) {
   logger.info('Cronjob running...');
   await getDbConnection();
   logger.info('Connected to DB.');
@@ -22,13 +22,13 @@ export async function syncAllUsers() {
 
   // Start syncing.
   logger.info('Found ' + users.length + ' users to sync...');
-  await syncNextUser(users);
+  await syncNextUser(users, throttle);
 }
 
 /**
  * Get next user from the list and sync it. If users aren't left, we are done!
  */
-async function syncNextUser(users: User[]) {
+async function syncNextUser(users: User[], throttle: number) {
   // All done!
   if (users.length == 0) {
     disconnectDb();
@@ -42,8 +42,8 @@ async function syncNextUser(users: User[]) {
   const user = users.pop();
   if (user) {
     await syncUser(user);
-    await timeout(3500);
-    await syncNextUser(users);
+    await timeout(throttle);
+    await syncNextUser(users, throttle);
   }
 }
 
@@ -62,6 +62,7 @@ async function syncUser(user: User) {
     logger.info('Login complete: ' + user.kilometrikisaUsername);
 
     // Save login token.
+    // TODO: is this required or even used anywhere if we always log in with username/password above?
     user.set('kilometrikisaToken', session.sessionCredentials.token);
     user.set('kilometrikisaSessionId', session.sessionCredentials.sessionId);
     await user.updateToken();

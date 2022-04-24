@@ -1,6 +1,7 @@
 import * as kilometrikisa from 'kilometrikisa-client';
 import { getStravaActivities, KilometrikisaActivityByDate } from '../strava/strava';
 import logger from '../../helpers/logger';
+import { env } from '../../environment';
 
 /**
  * Sync items from Strava to Kilometrikisa.
@@ -25,7 +26,7 @@ export async function doSync(
     sessionId: kilometrikisaSessionId,
   });
 
-  const contestId = parseInt(process.env.KILOMETRIKISA_COMPETITION_ID ?? '0');
+  const contestId = parseInt(env.contestId);
   const failedActivities: KilometrikisaActivityByDate = {};
   const syncedActivities: KilometrikisaActivityByDate = {};
   await Promise.all(

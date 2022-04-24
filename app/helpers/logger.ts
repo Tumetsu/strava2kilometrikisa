@@ -1,7 +1,9 @@
+import { env } from '../environment';
+
 const { transports, format, createLogger } = require('winston');
 
 export default createLogger({
-  level: process.env.LOGGING_LEVEL || 'info',
+  level: env.loggingLevel || 'info',
   format: format.combine(format.colorize(), format.simple()),
   transports: [new transports.Console()],
 });

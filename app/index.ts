@@ -1,13 +1,19 @@
 import path from 'path';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
+import { env, secrets } from './environment';
 import HttpException from './helpers/exceptions';
 import logger from './helpers/logger';
 import { isDev } from './helpers/helpers';
 import { getDbConnection } from './services/database/database';
+// Controllers
+import Home from './controllers/Home';
+import Kilometrikisa from './controllers/Kilometrikisa';
+import StravaAuth from './controllers/StravaAuth';
+import Sync from './controllers/Sync';
 
 const app = express();
 const MongoStore = connectMongo(session);
@@ -22,12 +28,6 @@ declare module 'express-session' {
   }
 }
 
-// Controllers
-import Home from './controllers/Home';
-import Kilometrikisa from './controllers/Kilometrikisa';
-import StravaAuth from './controllers/StravaAuth';
-import Sync from './controllers/Sync';
-
 getDbConnection();
 
 // Serve static files.
@@ -41,7 +41,7 @@ app.set('view engine', 'ejs');
 // Init sessions.
 app.use(
   session({
-    secret: process.env.KILOMETRIKISA_SESSION_SECRET ?? '',
+    secret: secrets.kilometrikisaSessionSecret,
     saveUninitialized: true,
     resave: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
@@ -49,8 +49,8 @@ app.use(
 );
 
 //lets start a server and listens on port 3000 for connections
-app.listen(process.env.PORT, () => {
-  logger.info(`Server listening on http://localhost:${process.env.PORT}`);
+app.listen(env.port, () => {
+  logger.info(`Server listening on http://localhost:${env.port}`);
 });
 
 //some basic routes to controllers

@@ -4,7 +4,7 @@ import 'express-async-errors';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
-import { env, secrets } from './environment';
+import { env, loadSecrets, secrets } from './environment';
 import HttpException from './helpers/exceptions';
 import logger from './helpers/logger';
 import { isDev } from './helpers/helpers';
@@ -14,6 +14,7 @@ import Home from './controllers/Home';
 import Kilometrikisa from './controllers/Kilometrikisa';
 import StravaAuth from './controllers/StravaAuth';
 import Sync from './controllers/Sync';
+import strava from 'strava-v3';
 
 const app = express();
 const MongoStore = connectMongo(session);
@@ -28,134 +29,150 @@ declare module 'express-session' {
   }
 }
 
-getDbConnection();
+async function init() {
+  if (!isDev()) {
+    // Load secrets asynchronously.
+    await loadSecrets();
+  }
 
-// Serve static files.
-app.use('/img', express.static(path.join(__dirname, '../app/assets/img')));
-app.use(express.static(path.join(__dirname, '../app/assets/dist')));
+  strava.config({
+    access_token: secrets.stravaAccessToken,
+    client_id: secrets.stravaClientId,
+    client_secret: secrets.stravaClientSecret,
+    redirect_uri: env.stravaRedirectUri,
+  });
 
-// set out template engine
-app.set('views', __dirname + '/../app/views');
-app.set('view engine', 'ejs');
+  await getDbConnection();
 
-// Init sessions.
-app.use(
-  session({
-    secret: secrets.kilometrikisaSessionSecret,
-    saveUninitialized: true,
-    resave: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  }),
-);
+  // Serve static files.
+  app.use('/img', express.static(path.join(__dirname, '../app/assets/img')));
+  app.use('/dist', express.static(path.join(__dirname, '../app/assets/dist')));
 
-//lets start a server and listens on port 3000 for connections
-app.listen(env.port, () => {
-  logger.info(`Server listening on http://localhost:${env.port}`);
-});
+  // set out template engine
+  app.set('views', __dirname + '/../app/views');
+  app.set('view engine', 'ejs');
 
-//some basic routes to controllers
-app.get('/', (req: Request, res: Response) => {
-  StravaAuth.auth(req, res);
-});
+  // Init sessions.
+  app.use(
+    session({
+      secret: secrets.kilometrikisaSessionSecret,
+      saveUninitialized: true,
+      resave: false,
+      store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    }),
+  );
 
-app.get('/faq', (req: Request, res: Response) => {
-  Home.faq(req, res);
-});
+  //lets start a server and listens on port 3000 for connections
+  app.listen(env.port, () => {
+    logger.info(`Server listening on http://localhost:${env.port}`);
+  });
 
-// Application flow:
+  //some basic routes to controllers
+  app.get('/', (req: Request, res: Response) => {
+    StravaAuth.auth(req, res);
+  });
 
-// 1. Home: Information about the app.
+  app.get('/faq', (req: Request, res: Response) => {
+    Home.faq(req, res);
+  });
 
-// 2. Strava authentication.
-app.get('/strava/auth', (req: Request, res: Response) => {
-  return StravaAuth.auth(req, res);
-});
+  // Application flow:
 
-// 2. Strava authentication ok.
-app.get('/strava/authcomplete', (req: Request, res: Response) => {
-  return StravaAuth.authComplete(req, res);
-});
+  // 1. Home: Information about the app.
 
-// 3. Kilometrikisa authentication.
-app.get('/kilometrikisa/auth', (req: Request, res: Response) => {
-  Kilometrikisa.auth(req, res);
-});
+  // 2. Strava authentication.
+  app.get('/strava/auth', (req: Request, res: Response) => {
+    return StravaAuth.auth(req, res);
+  });
 
-// 4. Kilometrikisa authentication.
-app.get('/kilometrikisa/authhandler', (req: Request, res: Response) => {
-  return Kilometrikisa.authHandler(req, res);
-});
+  // 2. Strava authentication ok.
+  app.get('/strava/authcomplete', (req: Request, res: Response) => {
+    return StravaAuth.authComplete(req, res);
+  });
 
-// 5. Success page!
-app.get('/account', (req: Request, res: Response) => {
-  return Sync.index(req, res);
-});
+  // 3. Kilometrikisa authentication.
+  app.get('/kilometrikisa/auth', (req: Request, res: Response) => {
+    Kilometrikisa.auth(req, res);
+  });
 
-// Manual sync.
-app.get('/manualsync', (req: Request, res: Response) => {
-  return Sync.manualSyncPreview(req, res);
-});
+  // 4. Kilometrikisa authentication.
+  app.get('/kilometrikisa/authhandler', (req: Request, res: Response) => {
+    return Kilometrikisa.authHandler(req, res);
+  });
 
-// Manual sync.
-app.get('/dosync', (req: Request, res: Response) => {
-  return Sync.doSync(req, res);
-});
+  // 5. Success page!
+  app.get('/account', (req: Request, res: Response) => {
+    return Sync.index(req, res);
+  });
 
-// Enable autosync.
-app.get('/enableautosync', (req: Request, res: Response) => {
-  return Sync.enableAutosync(req, res);
-});
+  // Manual sync.
+  app.get('/manualsync', (req: Request, res: Response) => {
+    return Sync.manualSyncPreview(req, res);
+  });
 
-// Disable autosync.
-app.get('/disableautosync', (req: Request, res: Response) => {
-  return Sync.disableAutosync(req, res);
-});
+  // Manual sync.
+  app.get('/dosync', (req: Request, res: Response) => {
+    return Sync.doSync(req, res);
+  });
 
-// Enable e-bike sync.
-app.get('/enableebike', (req: Request, res: Response) => {
-  return Sync.enableEBikeSync(req, res);
-});
+  // Enable autosync.
+  app.get('/enableautosync', (req: Request, res: Response) => {
+    return Sync.enableAutosync(req, res);
+  });
 
-// Disable e-bike sync.
-app.get('/disableebike', (req: Request, res: Response) => {
-  return Sync.disableEBikeSync(req, res);
-});
+  // Disable autosync.
+  app.get('/disableautosync', (req: Request, res: Response) => {
+    return Sync.disableAutosync(req, res);
+  });
 
-// isAuthenticated
-app.get('/isauthenticated', (req: Request, res: Response) => {
-  return Sync.isAuthenticated(req, res);
-});
+  // Enable e-bike sync.
+  app.get('/enableebike', (req: Request, res: Response) => {
+    return Sync.enableEBikeSync(req, res);
+  });
 
-// Log out.
-app.get('/logout', (req: Request, res: Response) => {
-  return Home.logout(req, res);
-});
+  // Disable e-bike sync.
+  app.get('/disableebike', (req: Request, res: Response) => {
+    return Sync.disableEBikeSync(req, res);
+  });
 
-// catch 404 and forward to error handler
-app.use(function (req: Request, res: Response, next: NextFunction) {
-  next(new HttpException(404, 'Not Found'));
-});
+  // isAuthenticated
+  app.get('/isauthenticated', (req: Request, res: Response) => {
+    return Sync.isAuthenticated(req, res);
+  });
 
-// error handlers
+  // Log out.
+  app.get('/logout', (req: Request, res: Response) => {
+    return Home.logout(req, res);
+  });
 
-// development error handler
-// will print stacktrace
-if (isDev()) {
+  // catch 404 and forward to error handler
+  app.use(function (req: Request, res: Response, next: NextFunction) {
+    next(new HttpException(404, 'Not Found'));
+  });
+
+  // error handlers
+
+  // development error handler
+  // will print stacktrace
+  if (isDev()) {
+    app.use(function (err: HttpException, req: Request, res: Response) {
+      res.status(err.status || 500);
+      res.render('error', {
+        message: err.message,
+        error: err,
+      });
+    });
+  }
+
+  // production error handler
+  // no stacktraces leaked to user
   app.use(function (err: HttpException, req: Request, res: Response) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err,
+      error: {},
     });
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err: HttpException, req: Request, res: Response) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {},
-  });
-});
+init();

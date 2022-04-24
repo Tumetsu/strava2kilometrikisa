@@ -73,9 +73,9 @@ describe('Cron sync', () => {
 
     // Sync called for all users
     expect(doSyncMock.mock.calls.length).toEqual(3);
-    expect(doSyncMock.mock.calls[0][1]).toEqual('user3');
+    expect(doSyncMock.mock.calls[0][1]).toEqual('user1');
     expect(doSyncMock.mock.calls[1][1]).toEqual('user2');
-    expect(doSyncMock.mock.calls[2][1]).toEqual('user1');
+    expect(doSyncMock.mock.calls[2][1]).toEqual('user3');
   });
 
   it('should sync other users even if login fails for one', async () => {
@@ -87,7 +87,7 @@ describe('Cron sync', () => {
     // Sync called for other users
     expect(doSyncMock.mock.calls.length).toEqual(2);
     expect(doSyncMock.mock.calls[0][1]).toEqual('user2');
-    expect(doSyncMock.mock.calls[1][1]).toEqual('user1');
+    expect(doSyncMock.mock.calls[1][1]).toEqual('user3');
   });
 
   it('should sync other users even if syncing fails for one', async () => {
@@ -98,9 +98,9 @@ describe('Cron sync', () => {
 
     // Sync called for all users
     expect(doSyncMock.mock.calls.length).toEqual(3);
-    expect(doSyncMock.mock.calls[0][1]).toEqual('user3');
+    expect(doSyncMock.mock.calls[0][1]).toEqual('user1');
     expect(doSyncMock.mock.calls[1][1]).toEqual('user2');
-    expect(doSyncMock.mock.calls[2][1]).toEqual('user1');
+    expect(doSyncMock.mock.calls[2][1]).toEqual('user3');
 
     // Results of each call vary a bit. First one should have rejected but others should have completed fine
     await expect(doSyncMock.mock.results[0].value).rejects.toThrowError('Fail');

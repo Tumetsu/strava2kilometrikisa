@@ -19,7 +19,8 @@
     "prettier:check": "prettier --check --config .prettierrc ./",
     "lint": "eslint ./app --ext .ts",
     "prettier:fix": "prettier --write 'app/**/*.{js,ts,scss}'",
-    "test": "jest --testPathIgnorePatterns .spec.js"
+    "test": "jest --testPathIgnorePatterns .spec.js",
+    "start": "node dist/index.js"
   },
   "author": "Tuomas Salmi, Jaakko Alajoki and Paul Stewart",
   "license": "ISC",

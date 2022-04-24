@@ -1,6 +1,6 @@
 import { CronJob } from 'cron';
-import { syncAllUsers } from './cron';
 import logger from '../helpers/logger';
+import { syncAllUsers } from '../services/sync/sync-all';
 
 const time = process.env.CRON_TIME_SYNC || '0 4 * * *';
 

@@ -1,7 +1,7 @@
-import { syncAllUsers } from './cron';
-import { doSync } from '../services/sync/sync';
+import { doSync } from './sync';
 import { kilometrikisaSession } from 'kilometrikisa-client';
-import { UserModel } from '../models/UserModel';
+import { UserModel } from '../../models/UserModel';
+import { syncAllUsers } from './sync-all';
 
 /**
  * A very crude mock for UserModel which just resembles the actual UserModel type.
@@ -22,20 +22,20 @@ function getMockUser(stravaToken = 'token') {
   };
 }
 
-jest.mock('../services/database/database', () => {
+jest.mock('../database/database', () => {
   return {
     getDbConnection: jest.fn().mockResolvedValue({}),
     disconnectDb: jest.fn().mockResolvedValue({}),
   };
 });
 
-jest.mock('../services/sync/sync', () => {
+jest.mock('./sync', () => {
   return {
     doSync: jest.fn(),
   };
 });
 
-jest.mock('../models/UserModel', () => {
+jest.mock('../../models/UserModel', () => {
   return {
     UserModel: {
       find: jest.fn(),

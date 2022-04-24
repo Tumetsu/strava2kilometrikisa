@@ -1,13 +1,15 @@
 import * as kilometrikisa from 'kilometrikisa-client';
-import { doSync } from '../services/sync/sync';
-import { User, UserModel } from '../models/UserModel';
-import logger from '../helpers/logger';
-import { getDbConnection, disconnectDb } from '../services/database/database';
+import { doSync } from './sync';
+import { User, UserModel } from '../../models/UserModel';
+import logger from '../../helpers/logger';
+import { getDbConnection, disconnectDb } from '../database/database';
 
-function timeout(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
+/**
+ * Sync all users from the database. Waits a bit after each user to not
+ * overwhelm the target server.
+ *
+ * @param throttle
+ */
 export async function syncAllUsers(throttle = 3500) {
   logger.info('Cronjob running...');
   await getDbConnection();
@@ -61,9 +63,13 @@ async function syncUser(user: User) {
       );
       logger.info(`${Object.keys(activities).length} activities synced`);
     } catch (err) {
-      logger.warn(`Activities sync failed for user ${user.kilometrikisaUsername}`, err);
+      logger.warn(`Activities sync failed for user ${user.kilometrikisaUsername}`);
     }
   } catch (err) {
     logger.warn(`User ${user.kilometrikisaUsername} login failed.`);
   }
+}
+
+function timeout(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

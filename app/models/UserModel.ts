@@ -3,9 +3,10 @@ import crypto from 'crypto';
 import strava from 'strava-v3';
 import logger from '../helpers/logger';
 import HttpException from '../helpers/exceptions';
+import { secrets } from '../environment';
 
 const algorithm = 'aes-256-ctr';
-const cryptoPassword = process.env.KILOMETRIKISA_CRYPTO_PASSWORD ?? '';
+const cryptoPassword = secrets.kilometrikisaCryptoPassword;
 
 export interface User extends mongoose.Document {
   stravaUserId: number;

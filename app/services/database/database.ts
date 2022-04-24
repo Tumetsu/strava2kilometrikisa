@@ -1,16 +1,17 @@
 import mongoose from 'mongoose';
 import { isDev } from '../../helpers/helpers';
+import { env, secrets } from '../../environment';
 
 export function getDbConnection() {
   const connectionString =
     `${isDev() ? 'mongodb://' : 'mongodb+srv://'}` +
-    process.env.KILOMETRIKISA_DBUSER +
+    env.dbUser +
     ':' +
-    process.env.KILOMETRIKISA_DBPASSWORD +
+    secrets.dbPassword +
     '@' +
-    process.env.KILOMETRIKISA_DBHOST +
+    env.dbHost +
     '/' +
-    process.env.KILOMETRIKISA_DB +
+    env.dbName +
     '?retryWrites=true&w=majority';
 
   // Connect to MongoDB.

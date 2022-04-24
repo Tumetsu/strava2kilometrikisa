@@ -48,9 +48,7 @@ export async function doSync(
   );
 
   if (Object.entries(failedActivities).length > 0) {
-    throw new Error(
-      'SyncModel.doSync: Failed to sync following activities: ' + JSON.stringify(failedActivities),
-    );
+    throw new Error('Failed to sync following activities: ' + JSON.stringify(failedActivities));
   }
 
   return syncedActivities;

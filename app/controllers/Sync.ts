@@ -83,13 +83,20 @@ export default {
       );
 
       // Sync success.
-      logger.info('Activities synced manually.', JSON.stringify(activities), user.stravaUserId);
+      logger.info(
+        `Activities synced manually for user ${user.kilometrikisaUsername}`,
+        JSON.stringify(activities),
+      );
 
       res.render('sync-dosync', {
         success: true,
       });
     } catch (err) {
-      logger.warn('Manual activity sync failed!', user.stravaUserId, err);
+      logger.warn(
+        `Manual activity sync failed for user ${user.kilometrikisaUsername}`,
+        user.stravaUserId,
+        err,
+      );
 
       res.render('sync-dosync', {
         success: false,

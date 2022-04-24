@@ -11,7 +11,7 @@ import { getDbConnection, disconnectDb } from '../database/database';
  * @param throttle
  */
 export async function syncAllUsers(throttle = 3500) {
-  logger.info('Cronjob running...');
+  logger.info('Syncing all users...');
   await getDbConnection();
   logger.info('Connected to DB.');
 

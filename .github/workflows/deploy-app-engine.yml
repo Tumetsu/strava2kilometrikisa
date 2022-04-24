@@ -1,0 +1,25 @@
+name: Deploy to Google App Engine
+
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: 'actions/checkout@v3'
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: projects/287232536/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: 'strava2kilometrikisa@strava2kilometrikisa.iam.gserviceaccount.com'
+
+      - name: Deploy to Google App Engine
+        uses: google-github-actions/deploy-appengine@v0
+
+      - name: Deploy finished
+        run: echo "Deployed in ${{ steps.deploy.outputs.url }}"

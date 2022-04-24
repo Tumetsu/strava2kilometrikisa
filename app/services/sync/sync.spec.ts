@@ -12,6 +12,7 @@ jest.mock('kilometrikisa-client', () => {
     kilometrikisaSession: () => {
       return {
         updateContestLog: updateContestLogMock,
+        updateMinuteContestLog: updateMinuteContestLogMock,
       };
     },
   };
@@ -19,6 +20,7 @@ jest.mock('kilometrikisa-client', () => {
 
 let getStravaActivitiesMock: jest.Mock;
 const updateContestLogMock = jest.fn();
+const updateMinuteContestLogMock = jest.fn();
 describe('Sync', () => {
   beforeEach(() => {
     getStravaActivitiesMock = strava.getStravaActivities as unknown as jest.Mock;
@@ -40,6 +42,7 @@ describe('Sync', () => {
       },
     });
     updateContestLogMock.mockResolvedValue({});
+    updateMinuteContestLogMock.mockResolvedValue({});
     const results = await doSync(123, 'token', 'kilometrikisatoken', 'sessionId', true);
     expect(Object.entries(results).length).toEqual(2);
   });
@@ -67,6 +70,7 @@ describe('Sync', () => {
       },
     });
 
+    updateMinuteContestLogMock.mockResolvedValue({});
     updateContestLogMock
       .mockResolvedValueOnce({})
       .mockRejectedValueOnce(new Error('Some error'))

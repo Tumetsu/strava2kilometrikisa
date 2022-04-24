@@ -31,8 +31,14 @@ export async function doSync(
   await Promise.all(
     Object.entries(activities).map(async ([date, activity]) => {
       try {
-        // TODO: Minute sync
         await session.updateContestLog(contestId, date, activity.distance, activity.isEBike);
+        await session.updateMinuteContestLog(
+          contestId,
+          date,
+          activity.hours,
+          activity.minutes,
+          activity.isEBike,
+        );
         syncedActivities[date] = activity;
       } catch (err) {
         logger.warn('Could not post activity to Kilometrikisa', activity);

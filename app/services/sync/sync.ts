@@ -6,7 +6,7 @@ import logger from '../../helpers/logger';
  * Sync items from Strava to Kilometrikisa.
  *
  * @param  stravaUserId           Strava user id.
- * @param  stravaToken            Kilometrikisa token.
+ * @param  stravaToken            Strava token.
  * @param  stravaToken            Kilometrikisa token.
  * @param  kilometrikisaToken     Kilometrikisa token.
  * @param  kilometrikisaSessionId Kilometrikisa session id.
@@ -27,10 +27,13 @@ export async function doSync(
 
   const contestId = parseInt(process.env.KILOMETRIKISA_COMPETITION_ID ?? '0');
   const failedActivities: KilometrikisaActivityByDate = {};
-  const syncedActivities = await Promise.all(
+  const syncedActivities: KilometrikisaActivityByDate = {};
+  await Promise.all(
     Object.entries(activities).map(async ([date, activity]) => {
       try {
-        return await session.updateContestLog(contestId, date, activity.distance, activity.isEBike);
+        // TODO: Minute sync
+        await session.updateContestLog(contestId, date, activity.distance, activity.isEBike);
+        syncedActivities[date] = activity;
       } catch (err) {
         logger.warn('Could not post activity to Kilometrikisa', activity);
         failedActivities[date] = activity;

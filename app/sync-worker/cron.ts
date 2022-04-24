@@ -20,38 +20,22 @@ export async function syncAllUsers(throttle = 3500) {
     kilometrikisaPassword: { $exists: true },
   });
 
-  // Start syncing.
   logger.info('Found ' + users.length + ' users to sync...');
-  await syncNextUser(users, throttle);
-}
 
-/**
- * Get next user from the list and sync it. If users aren't left, we are done!
- */
-async function syncNextUser(users: User[], throttle: number) {
-  // All done!
-  if (users.length == 0) {
-    disconnectDb();
-    logger.info(users.length + ' users left in queue.');
-    logger.info('Disconnected from DB.');
-    return;
-  }
-
-  logger.info(users.length + ' users left in queue.');
-
-  const user = users.pop();
-  if (user) {
+  for (const user of users) {
     await syncUser(user);
     await timeout(throttle);
-    await syncNextUser(users, throttle);
   }
+
+  disconnectDb();
+  logger.info(`Syncing done for ${users.length} users`);
 }
 
 /**
  * Sync given user.
  */
 async function syncUser(user: User) {
-  logger.info('!! Syncing for user ' + user.kilometrikisaUsername);
+  logger.info(`Syncing for user ${user.kilometrikisaUsername}`);
 
   try {
     const session = await kilometrikisa.kilometrikisaSession({
@@ -75,11 +59,11 @@ async function syncUser(user: User) {
         user.kilometrikisaSessionId,
         user.ebike,
       );
-      logger.info(Object.keys(activities).length + ' activities synced');
+      logger.info(`${Object.keys(activities).length} activities synced`);
     } catch (err) {
-      logger.warn('Activities sync failed for user ' + user.kilometrikisaUsername, err);
+      logger.warn(`Activities sync failed for user ${user.kilometrikisaUsername}`, err);
     }
   } catch (err) {
-    logger.warn('User ' + user.kilometrikisaUsername + ' login failed.');
+    logger.warn(`User ${user.kilometrikisaUsername} login failed.`);
   }
 }

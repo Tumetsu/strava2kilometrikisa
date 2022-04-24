@@ -37,7 +37,10 @@ export default {
 
         try {
           // Create user object, if id doesn't exists.
-          let user = await UserModel.findOne({ stravaUserId: req.session.stravaUserId }, 'stravaUserId');
+          let user = await UserModel.findOne(
+            { stravaUserId: req.session.stravaUserId },
+            'stravaUserId',
+          );
           if (!user) {
             user = new UserModel();
           }

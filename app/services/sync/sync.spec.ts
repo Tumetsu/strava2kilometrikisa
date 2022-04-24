@@ -72,6 +72,8 @@ describe('Sync', () => {
       .mockRejectedValueOnce(new Error('Some error'))
       .mockResolvedValueOnce({});
 
-    await expect(doSync(123, 'token', 'kilometrikisatoken', 'sessionId', true)).rejects.toThrowError('Failed to sync');
+    await expect(
+      doSync(123, 'token', 'kilometrikisatoken', 'sessionId', true),
+    ).rejects.toThrowError('Failed to sync');
   });
 });

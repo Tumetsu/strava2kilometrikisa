@@ -62,7 +62,10 @@ export async function getStravaActivities(
   const activityByDate: ActivityByDate = await strava.athlete
     .listActivities({ access_token: stravaToken, after: lastFiveDaysDate() })
     .filter((activity: StravaActivity) => {
-      return (activity.type === 'Ride' || (syncEBike && activity.type === 'EBikeRide')) && !activity.trainer;
+      return (
+        (activity.type === 'Ride' || (syncEBike && activity.type === 'EBikeRide')) &&
+        !activity.trainer
+      );
     })
     .map((activity: StravaActivity) => {
       const dateFormatted = activity.start_date_local.replace(/T.*/, '');
@@ -91,20 +94,23 @@ export async function getStravaActivities(
     }, {});
 
   // Convert to hours and minutes
-  return Object.entries(activityByDate).reduce<KilometrikisaActivityByDate>((collection, activityByDate) => {
-    const [date, activity] = activityByDate;
-    const hours = Math.floor(activity.seconds / 3600);
-    const minutes = Math.floor((activity.seconds - hours * 3600) / 60);
+  return Object.entries(activityByDate).reduce<KilometrikisaActivityByDate>(
+    (collection, activityByDate) => {
+      const [date, activity] = activityByDate;
+      const hours = Math.floor(activity.seconds / 3600);
+      const minutes = Math.floor((activity.seconds - hours * 3600) / 60);
 
-    collection[date] = {
-      distance: activity.distance,
-      isEBike: activity.isEBike,
-      hours,
-      minutes,
-    };
+      collection[date] = {
+        distance: activity.distance,
+        isEBike: activity.isEBike,
+        hours,
+        minutes,
+      };
 
-    return collection;
-  }, {});
+      return collection;
+    },
+    {},
+  );
 }
 
 /**

@@ -17,7 +17,9 @@ export default {
     // Load user.
     const user = await findUser({ stravaUserId: req.session.stravaUserId as number });
     if (!user) {
-      logger.info('SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId);
+      logger.info(
+        'SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId,
+      );
       res.redirect('/?error=usernotfound');
       return;
     }
@@ -34,7 +36,9 @@ export default {
   manualSyncPreview: async function (req: Request, res: Response) {
     const user = await findUser({ stravaUserId: req.session.stravaUserId as number });
     if (!user) {
-      logger.info('SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId);
+      logger.info(
+        'SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId,
+      );
       res.redirect('/?error=usernotfound');
       return;
     }
@@ -61,7 +65,9 @@ export default {
     // Load user.
     const user = await findUser({ stravaUserId: req.session.stravaUserId as number });
     if (!user) {
-      logger.info('SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId);
+      logger.info(
+        'SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId,
+      );
       res.redirect('/?error=usernotfound');
       return;
     }
@@ -147,7 +153,9 @@ export default {
       const isValid = await session.isSessionValid();
       res.send(JSON.stringify({ kilometrikisa: isValid }));
     } else {
-      logger.info('SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId);
+      logger.info(
+        'SyncController.isAuthenticated: No user for Strava ID ' + req.session.stravaUserId,
+      );
       res.redirect('/?error=usernotfound');
     }
   },

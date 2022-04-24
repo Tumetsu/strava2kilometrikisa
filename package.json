@@ -8,6 +8,7 @@
   },
   "repository": "https://github.com/tumetsu/strava2kilometrikisa",
   "scripts": {
+    "build": "npm run backend:build && npm run frontend:build",
     "backend:build": "tsc",
     "backend:serve": "node dist/index.js",
     "backend:watch": "ts-node-dev app/index.ts",
@@ -20,7 +21,8 @@
     "lint": "eslint ./app --ext .ts",
     "prettier:fix": "prettier --write 'app/**/*.{js,ts,scss}'",
     "test": "jest --testPathIgnorePatterns .spec.js",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "deploy": "npm run build && gcloud app deploy"
   },
   "author": "Tuomas Salmi, Jaakko Alajoki and Paul Stewart",
   "license": "ISC",

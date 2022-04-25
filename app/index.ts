@@ -74,6 +74,14 @@ async function init() {
     }),
   );
 
+  /**
+   * Add extra options for all templates to render.
+   */
+  app.use((req, res, next) => {
+    res.locals.isLoggedIn = req.session?.stravaUserId;
+    next();
+  });
+
   //lets start a server and listens on port 3000 for connections
   app.listen(env.port, () => {
     logger.info(`Server listening on http://localhost:${env.port}`);

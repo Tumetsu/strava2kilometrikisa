@@ -6,8 +6,12 @@
 
 			<nav class="nav nav-inline">
 				<a class="nav-link" href="/">Home</a>
-				<a class="nav-link" href="/account">Account</a>
-				<a class="nav-link" href="/logout">Logout</a>
+        <% if (isLoggedIn) { %>
+				  <a class="nav-link" href="/account">Account</a>
+        <% } %>
+        <% if (isLoggedIn) { %>
+				  <a class="nav-link" href="/logout">Logout</a>
+        <% } %>
 			  <a class="nav-link" href="/faq">FAQ</a>
 			</nav>
 

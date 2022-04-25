@@ -43,7 +43,6 @@ async function syncUser(user: User) {
     logger.info('Login complete: ' + user.kilometrikisaUsername);
 
     // Save login token.
-    // TODO: is this required or even used anywhere if we always log in with username/password above?
     user.set('kilometrikisaToken', session.sessionCredentials.token);
     user.set('kilometrikisaSessionId', session.sessionCredentials.sessionId);
     await user.updateToken();

@@ -15,6 +15,7 @@ import Kilometrikisa from './controllers/Kilometrikisa';
 import StravaAuth from './controllers/StravaAuth';
 import Sync from './controllers/Sync';
 import strava from 'strava-v3';
+import { startWorker } from './sync-worker/worker';
 
 const app = express();
 const MongoStore = connectMongo(session);
@@ -43,6 +44,9 @@ async function init() {
   });
 
   await getDbConnection();
+
+  // Start cron worker to sync all users
+  startWorker();
 
   // Serve static files.
   app.use('/img', express.static(path.join(__dirname, '../app/assets/img')));

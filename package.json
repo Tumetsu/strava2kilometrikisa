@@ -19,7 +19,7 @@
     "worker:watch": "ts-node-dev app/sync-worker/worker.ts",
     "prettier:check": "prettier --check --config .prettierrc ./",
     "lint": "eslint ./app --ext .ts",
-    "prettier:fix": "prettier --write 'app/**/*.{js,ts,scss}'",
+    "prettier:fix": "prettier --write --config .prettierrc ./",
     "test": "jest --testPathIgnorePatterns .spec.js",
     "start": "node dist/index.js",
     "deploy": "npm run build && gcloud app deploy"

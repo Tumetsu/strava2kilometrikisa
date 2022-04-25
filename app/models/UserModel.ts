@@ -17,6 +17,7 @@ export interface User extends mongoose.Document {
   kilometrikisaSessionId: string;
   kilometrikisaUsername: string;
   kilometrikisaPassword: string;
+  kilometrikisaIv: string;
   autosync: boolean;
   ebike: boolean;
 
@@ -34,6 +35,7 @@ const UserSchema = new mongoose.Schema<User>({
   kilometrikisaSessionId: { type: String },
   kilometrikisaUsername: { type: String },
   kilometrikisaPassword: { type: String },
+  kilometrikisaIv: { type: String },
 
   // Sync kilometers automatically.
   autosync: { type: Boolean },
@@ -60,20 +62,28 @@ UserSchema.methods.updateToken = async function (this: User) {
 
 // Encrypt and set password.
 UserSchema.methods.setPassword = function (this: User, password: string) {
-  // TODO: Do not use deprecated method
-  const cipher = crypto.createCipher(algorithm, cryptoPassword);
-  let crypted = cipher.update(password, 'utf8', 'hex');
-  crypted += cipher.final('hex');
-  this.kilometrikisaPassword = crypted;
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, cryptoPassword, iv);
+  const encrypted = Buffer.concat([cipher.update(password, 'utf8'), cipher.final()]);
+
+  this.kilometrikisaPassword = encrypted.toString('hex');
+  this.kilometrikisaIv = iv.toString('hex');
 };
 
 // Decrypt and get password.
 UserSchema.methods.getPassword = function (this: User) {
-  // TODO: Do not use deprecated method
-  const decipher = crypto.createDecipher(algorithm, cryptoPassword);
-  let dec = decipher.update(this.kilometrikisaPassword, 'hex', 'utf8');
-  dec += decipher.final('utf8');
-  return dec;
+  const decipher = crypto.createDecipheriv(
+    algorithm,
+    cryptoPassword,
+    Buffer.from(this.kilometrikisaIv, 'hex'),
+  );
+
+  const decrypted = Buffer.concat([
+    decipher.update(Buffer.from(this.kilometrikisaPassword, 'hex')),
+    decipher.final(),
+  ]);
+
+  return decrypted.toString();
 };
 
 // Create model.

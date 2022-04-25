@@ -2,7 +2,6 @@ import * as kilometrikisa from 'kilometrikisa-client';
 import { doSync } from './sync';
 import { User, UserModel } from '../../models/UserModel';
 import logger from '../../helpers/logger';
-import { getDbConnection, disconnectDb } from '../database/database';
 
 /**
  * Sync all users from the database. Waits a bit after each user to not
@@ -12,7 +11,6 @@ import { getDbConnection, disconnectDb } from '../database/database';
  */
 export async function syncAllUsers(throttle = 3500) {
   logger.info('Syncing all users...');
-  await getDbConnection();
   logger.info('Connected to DB.');
 
   // Find all users having autosync enabled.
@@ -28,9 +26,6 @@ export async function syncAllUsers(throttle = 3500) {
     await syncUser(user);
     await timeout(throttle);
   }
-
-  disconnectDb();
-  logger.info(`Syncing done for ${users.length} users`);
 }
 
 /**

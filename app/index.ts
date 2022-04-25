@@ -112,7 +112,7 @@ async function init() {
 
   // Manual sync.
   app.get('/dosync', (req: Request, res: Response) => {
-    return Sync.doSync(req, res);
+    return Sync.manualSync(req, res);
   });
 
   // Enable autosync.

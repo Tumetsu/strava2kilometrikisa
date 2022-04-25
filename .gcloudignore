@@ -14,6 +14,7 @@
 .gitignore
 .idea/
 .github/
+.gcp_key*
 
 # Node.js dependencies:
 node_modules/

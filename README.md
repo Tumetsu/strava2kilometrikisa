@@ -23,6 +23,15 @@ An application to fill the gap between [Strava](https://strava.com/) and [Kilome
 
 [More information about secret management](https://medium.com/@shashkiranr/typescript-gcp-secret-manager-firebase-app-engine-multiple-environment-better-credential-45198f3e53e)
 
+## Deployment 
+
+### Local
+After setup run `npm run deploy` to build and deploy the application
+
+### Github Actions
+Trigger deployment from the Github Actions manually. Requires a proper service account key to be set to the 
+Github environment.
+
 ## Database
 
 This app uses a MongoDB database.

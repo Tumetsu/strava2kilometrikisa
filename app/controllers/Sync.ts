@@ -61,7 +61,7 @@ export default {
   /**
    * Sync kilometers.
    */
-  doSync: async function (req: Request, res: Response) {
+  manualSync: async function (req: Request, res: Response) {
     // Load user.
     const user = await findUser({ stravaUserId: req.session.stravaUserId as number });
     if (!user) {

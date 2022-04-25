@@ -12,10 +12,19 @@ jobs:
     steps:
       - uses: 'actions/checkout@v3'
 
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test
+      - run: npm run build
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
-          workload_identity_provider: projects/287232536/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          workload_identity_provider: projects/287232536/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider
           service_account: 'strava2kilometrikisa@strava2kilometrikisa.iam.gserviceaccount.com'
 
       - name: Deploy to Google App Engine

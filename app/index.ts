@@ -1,5 +1,6 @@
 import path from 'path';
 import express, { NextFunction, Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import session from 'express-session';
@@ -42,6 +43,11 @@ async function init() {
   // Serve static files.
   app.use('/img', express.static(path.join(__dirname, '../app/assets/img')));
   app.use('/dist', express.static(path.join(__dirname, '../app/assets/dist')));
+
+  // parse application/x-www-form-urlencoded
+  app.use(bodyParser.urlencoded({ extended: false }));
+  // parse application/json
+  app.use(bodyParser.json());
 
   // set out template engine
   app.set('views', __dirname + '/../app/views');
@@ -102,7 +108,7 @@ async function init() {
   });
 
   // 4. Kilometrikisa authentication.
-  app.get('/kilometrikisa/authhandler', (req: Request, res: Response) => {
+  app.post('/kilometrikisa/authhandler', (req: Request, res: Response) => {
     return Kilometrikisa.authHandler(req, res);
   });
 

@@ -32,8 +32,8 @@ export default {
    * Try logging in to Kilometrikisa.
    */
   authHandler: async function (req: Request, res: Response) {
-    const username = req.query.username as string;
-    const password = req.query.password as string;
+    const username = req.body.username as string;
+    const password = req.body.password as string;
 
     logger.info('Logging in', { username });
 

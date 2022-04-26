@@ -47,6 +47,17 @@ async function init() {
   app.set('views', __dirname + '/../app/views');
   app.set('view engine', 'ejs');
 
+  // Enforce SSL on production
+  if (!isDev()) {
+    app.enable('trust proxy');
+    app.use(function (req, res, next) {
+      if (process.env.NODE_ENV != 'development' && !req.secure) {
+        return res.redirect('https://' + req.headers.host + req.url);
+      }
+      next();
+    });
+  }
+
   // Init sessions.
   app.use(
     session({

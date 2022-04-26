@@ -22,12 +22,11 @@
     "prettier:fix": "prettier --write --config .prettierrc ./",
     "test": "jest --testPathIgnorePatterns .spec.js",
     "start": "node dist/index.js",
-    "deploy": "npm run build && gcloud app deploy"
+    "deploy": "npm run test && echo 'Deploying master branch to Heroku...' && git push heroku master"
   },
   "author": "Tuomas Salmi, Jaakko Alajoki and Paul Stewart",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/secret-manager": "^3.12.0",
     "connect-mongo": "^3.2.0",
     "cron": "^1.7.2",
     "ejs": "^2.7.4",

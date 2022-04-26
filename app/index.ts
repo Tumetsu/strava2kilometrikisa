@@ -4,7 +4,7 @@ import 'express-async-errors';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
-import { env, loadSecrets, secrets } from './environment';
+import { env, secrets } from './environment';
 import HttpException from './helpers/exceptions';
 import logger from './helpers/logger';
 import { isDev } from './helpers/helpers';
@@ -30,11 +30,6 @@ declare module 'express-session' {
 }
 
 async function init() {
-  if (!isDev()) {
-    // Load secrets asynchronously.
-    await loadSecrets();
-  }
-
   strava.config({
     access_token: secrets.stravaAccessToken,
     client_id: secrets.stravaClientId,

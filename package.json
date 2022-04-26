@@ -17,6 +17,7 @@
     "dev": "concurrently \"npm run frontend:watch\" \"npm run backend:watch\"",
     "worker:run": "node dist/sync-worker/worker.js",
     "worker:watch": "ts-node-dev app/sync-worker/worker.ts",
+    "sync:run": "node dist/sync-worker/run-sync.js",
     "prettier:check": "prettier --check --config .prettierrc ./",
     "lint": "eslint ./app --ext .ts",
     "prettier:fix": "prettier --write --config .prettierrc ./",

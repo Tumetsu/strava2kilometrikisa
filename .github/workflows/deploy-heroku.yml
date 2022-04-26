@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: Production
+      name: Beta
       url: https://strava2kilometrikisa.herokuapp.com/
     steps:
       - uses: actions/checkout@v3

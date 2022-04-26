@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as kilometrikisa from 'kilometrikisa-client';
 import logger from '../helpers/logger';
 import { findUser } from '../models/UserModel';
+import { KilometrikisaError } from 'kilometrikisa-client';
 
 /**
  * Handle Kilometrikisa login flow.
@@ -60,7 +61,7 @@ export default {
         }
       }
     } catch (err) {
-      logger.info('Login failed', { username });
+      logger.info('Login failed', { username, error: (err as KilometrikisaError).message });
       res.redirect('/kilometrikisa/auth?error=true');
     }
   },

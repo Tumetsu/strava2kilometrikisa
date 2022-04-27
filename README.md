@@ -3,6 +3,9 @@ A fork from [the original Strava2Kilometrikisa app](https://github.com/jaamo/str
 
 An application to fill the gap between [Strava](https://strava.com/) and [Kilometrikisa](https://www.kilometrikisa.fi/).
 
+## Usage
+The app is currently running as a beta in Heroku. While it _should_ work and sync your Strava data to Kilometrikisa, please be aware that ultimately it is still just a beta version and might encounter some issues with syncing especially when the Kilometrikisa actually begins and you might have to enable your syncing again later. If you notice problems, please open an issue about them.
+
 ## Development
 
 1. Run `$ docker-compose up -d` to spin up local Mongodb instance

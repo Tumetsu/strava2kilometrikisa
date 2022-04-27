@@ -6,7 +6,6 @@ import HttpException from '../helpers/exceptions';
 import { secrets } from '../environment';
 
 const algorithm = 'aes-256-ctr';
-const cryptoPassword = secrets.kilometrikisaCryptoPassword;
 
 export interface User extends mongoose.Document {
   stravaUserId: number;
@@ -63,7 +62,7 @@ UserSchema.methods.updateToken = async function (this: User) {
 // Encrypt and set password.
 UserSchema.methods.setPassword = function (this: User, password: string) {
   const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algorithm, cryptoPassword, iv);
+  const cipher = crypto.createCipheriv(algorithm, secrets.kilometrikisaCryptoPassword, iv);
   const encrypted = Buffer.concat([cipher.update(password, 'utf8'), cipher.final()]);
 
   this.kilometrikisaPassword = encrypted.toString('hex');
@@ -74,7 +73,7 @@ UserSchema.methods.setPassword = function (this: User, password: string) {
 UserSchema.methods.getPassword = function (this: User) {
   const decipher = crypto.createDecipheriv(
     algorithm,
-    cryptoPassword,
+    secrets.kilometrikisaCryptoPassword,
     Buffer.from(this.kilometrikisaIv, 'hex'),
   );
 

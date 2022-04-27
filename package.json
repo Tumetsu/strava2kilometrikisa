@@ -21,7 +21,7 @@
     "prettier:check": "prettier --check --config .prettierrc ./",
     "lint": "eslint ./app --ext .ts",
     "prettier:fix": "prettier --write --config .prettierrc ./",
-    "test": "jest --testPathIgnorePatterns .spec.js",
+    "test": "jest --testPathIgnorePatterns .spec.js --detectOpenHandles",
     "start": "node dist/index.js",
     "deploy": "npm run test && echo 'Deploying master branch to Heroku...' && git push heroku master"
   },
@@ -63,6 +63,7 @@
     "file-loader": "^3.0.1",
     "jest": "^27.5.1",
     "mini-css-extract-plugin": "^0.6.0",
+    "mongodb-memory-server": "^8.5.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
     "sass": "^1.24.4",

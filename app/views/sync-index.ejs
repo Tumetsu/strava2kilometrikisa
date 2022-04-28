@@ -21,7 +21,7 @@
                             <div class="alert alert-danger hidden js-isauthenticated" role="alert">
                                 Your Kilometrikisa session is timed out! Please <a href="/">login again</a>.
                             </div>
-			   
+
                             <p>
                                 Automatic synchronization is <b class="js-autosync-status"><% if (autosync) { %>enabled<% } else { %>disabled<% } %></b>.
                             </p>
@@ -30,7 +30,7 @@
                                 <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox" <% if (autosync) { %>checked<% } %>>
                                 <label for="cmn-toggle-1"></label>
                             </div>
-			   
+
                             <p>
                                 E-bike synchronization is <b class="js-ebike-status"><% if (ebike) { %>enabled<% } else { %>disabled<% } %></b>.
                             </p>
@@ -44,6 +44,12 @@
                                 <img class="manual-sync__icon" src="/img/gear.svg" />
                                 <span class="manual-sync__button" >
                                     Sync manually
+                                </span>
+                            </a>
+
+                            <a id="delete-data" class="delete-data" href="/delete">
+                                <span class="delete-data__button" >
+                                    Delete all my data from this site
                                 </span>
                             </a>
 

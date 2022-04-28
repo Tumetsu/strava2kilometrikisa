@@ -43,6 +43,15 @@ $(document).ready(function () {
       },
     });
   });
+  $('#delete-data').click(function () {
+    if (
+      !window.confirm(
+        'This deletes all your data from this site and logs you out. Strava or Kilometrikisa will not be affected. Continue?',
+      )
+    ) {
+      return false;
+    }
+  });
 
   if ($('.js-isauthenticated').length > 0) {
     $.ajax({

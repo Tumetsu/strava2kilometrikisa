@@ -164,6 +164,11 @@ async function init() {
     return Sync.isAuthenticated(req, res);
   });
 
+  // Delete user.
+  app.get('/delete', (req: Request, res: Response) => {
+    return Home.delete(req, res);
+  });
+
   // Log out.
   app.get('/logout', (req: Request, res: Response) => {
     return Home.logout(req, res);

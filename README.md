@@ -10,21 +10,21 @@ The app is currently running as a beta in Heroku. While it _should_ work and syn
 
 1. Run `$ docker-compose up -d` to spin up local Mongodb instance
 2. Grab yourself some [Strava API credentials](https://developers.strava.com)
-3. Copy and configure `app/.env.example` to `app/.env`
-3.`$ source .env`
+3. Copy and configure `.env.example` to `.env` and fill in the missing values
+3. `$ source .env`
 4. `$ nvm use`
 5. `$ npm install`
 6. `$ npm run dev`
 
-## Deployment 
-The app should be easy to deploy to modern cloud environments. Basically all you need is to run the 
+## Deployment
+The app should be easy to deploy to modern cloud environments. Basically all you need is to run the
 main app process and syncing process. Following examples are for deploying to Heroku.
 
 ### Local
 After setup run `npm run deploy` to run tests and then deploy `master` branch to the Heroku.
 
 ### Github Actions
-Trigger `Deploy to Heroku" flow from the Github Actions manually. 
+Trigger `Deploy to Heroku` flow from the Github Actions manually.
 
 ## Database
 

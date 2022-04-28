@@ -1,6 +1,6 @@
 import * as kilometrikisa from 'kilometrikisa-client';
 import { getStravaActivities, KilometrikisaActivityByDate } from '../strava/strava';
-import logger from '../../helpers/logger';
+import { syncLogger } from '../../helpers/logger';
 import { env } from '../../environment';
 
 /**
@@ -42,7 +42,7 @@ export async function doSync(
         );
         syncedActivities[date] = activity;
       } catch (err) {
-        logger.warn('Could not post activity to Kilometrikisa', activity);
+        syncLogger.warn('Could not post activity to Kilometrikisa', activity);
         failedActivities[date] = activity;
       }
     }),

@@ -1,7 +1,7 @@
 import * as kilometrikisa from 'kilometrikisa-client';
 import { doSync } from './sync';
 import { User, UserModel } from '../../models/UserModel';
-import logger from '../../helpers/logger';
+import { syncLogger } from '../../helpers/logger';
 
 /**
  * Sync all users from the database. Waits a bit after each user to not
@@ -10,8 +10,8 @@ import logger from '../../helpers/logger';
  * @param throttle
  */
 export async function syncAllUsers(throttle = 3500) {
-  logger.info('Syncing all users...');
-  logger.info('Connected to DB.');
+  syncLogger.info('Syncing all users...');
+  syncLogger.info('Connected to DB.');
 
   // Find all users having autosync enabled.
   const users: User[] = await UserModel.find({
@@ -20,7 +20,7 @@ export async function syncAllUsers(throttle = 3500) {
     kilometrikisaPassword: { $exists: true },
   });
 
-  logger.info('Found ' + users.length + ' users to sync...');
+  syncLogger.info('Found ' + users.length + ' users to sync...');
 
   for (const user of users) {
     await syncUser(user);
@@ -32,7 +32,7 @@ export async function syncAllUsers(throttle = 3500) {
  * Sync given user.
  */
 async function syncUser(user: User) {
-  logger.info(`Syncing for user ${user.kilometrikisaUsername}`);
+  syncLogger.info(`Syncing for user ${user.kilometrikisaUsername}`);
 
   try {
     const session = await kilometrikisa.kilometrikisaSession({
@@ -40,7 +40,7 @@ async function syncUser(user: User) {
       password: user.getPassword(),
     });
 
-    logger.info('Login complete: ' + user.kilometrikisaUsername);
+    syncLogger.info('Login complete: ' + user.kilometrikisaUsername);
 
     // Save login token.
     user.set('kilometrikisaToken', session.sessionCredentials.token);
@@ -55,12 +55,12 @@ async function syncUser(user: User) {
         user.kilometrikisaSessionId,
         user.ebike,
       );
-      logger.info(`${Object.keys(activities).length} activities synced`);
+      syncLogger.info(`${Object.keys(activities).length} activities synced`);
     } catch (err) {
-      logger.warn(`Activities sync failed for user ${user.kilometrikisaUsername}`);
+      syncLogger.warn(`Activities sync failed for user ${user.kilometrikisaUsername}`);
     }
   } catch (err) {
-    logger.warn(`User ${user.kilometrikisaUsername} login failed.`);
+    syncLogger.warn(`User ${user.kilometrikisaUsername} login failed.`);
   }
 }
 

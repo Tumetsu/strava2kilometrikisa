@@ -35,7 +35,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.0",
-    "kilometrikisa-client": "0.13.2",
+    "kilometrikisa-client": "^0.13.3",
     "mongoose": "^5.11.9",
     "morgan": "^1.7.0",
     "postcss-loader": "^3.0.0",
